@@ -93,16 +93,16 @@ passport.deserializeUser(async (id, done) => {
 // Добавление CORS и JSON парсера
 const allowedOrigins = [
     'chrome-extension://kidbckaldfjbknhlfdadpodaalcficbf', // Добавьте здесь ваш origin расширения
-    'http://localhost:4000',
-    'http://localhost:4000/auth/google',
-    'http://localhost:4000/auth/google/callback',
-    'http://localhost:4000/create-checkout-session',
-    'http://localhost:4000/paywall',
-    'http://localhost:4000/payment-success',
-    'http://localhost:4000/payment-cancelled',
-    'http://localhost:4000/api/user-info',
-    'http://localhost:4000/api/update-tokens',
-    'http://localhost:4000/api',
+    'https://aianswerserver-monetize.onrender.com',
+    'https://aianswerserver-monetize.onrender.com/auth/google',
+    'https://aianswerserver-monetize.onrender.com/auth/google/callback',
+    'https://aianswerserver-monetize.onrender.com/create-checkout-session',
+    'https://aianswerserver-monetize.onrender.com/paywall',
+    'https://aianswerserver-monetize.onrender.com/payment-success',
+    'https://aianswerserver-monetize.onrender.com/payment-cancelled',
+    'https://aianswerserver-monetize.onrender.com/api/user-info',
+    'https://aianswerserver-monetize.onrender.com/api/update-tokens',
+    'https://aianswerserver-monetize.onrender.com/api',
 
 ];
 
