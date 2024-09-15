@@ -120,18 +120,18 @@ app.use(cors({
 app.use(express.json());
 
 // Маршруты для авторизации
-app.get('https://aianswerserver-monetize.onrender.com/auth/google',
+app.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-app.get('https://aianswerserver-monetize.onrender.com/auth/google/callback',
+app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        res.redirect('https://aianswerserver-monetize.onrender.com/paywall'); // Перенаправление на страницу пэйвола после успешной авторизации
+        res.redirect('/paywall'); // Перенаправление на страницу пэйвола после успешной авторизации
     }
 );
 
-app.post('https://aianswerserver-monetize.onrender.com/create-checkout-session', async (req, res) => {
+app.post('/create-checkout-session', async (req, res) => {
     const { price, tokens } = req.body; // Получаем данные из формы
     const priceInCents = +price; // Преобразуем цену в число
     const tokensCount = +tokens;
@@ -164,10 +164,10 @@ app.get('/paywall', (req, res) => {
     if (req.isAuthenticated()) {
         res.sendFile(path.resolve('./public/paywall/paywall.html'));
     } else {
-        res.redirect('https://aianswerserver-monetize.onrender.com/auth/google');
+        res.redirect('/auth/google');
     }
 });
-app.get('https://aianswerserver-monetize.onrender.com/api/user', (req, res) => {
+app.get('/api/user', (req, res) => {
     if (req.isAuthenticated()) {
         const user = req.user;
         res.json({ displayName: user.displayName, email: user.email });
@@ -175,7 +175,7 @@ app.get('https://aianswerserver-monetize.onrender.com/api/user', (req, res) => {
         res.status(401).json({ error: 'Unauthorized' });
     }
 });
-app.get('https://aianswerserver-monetize.onrender.com/sign-out', (req, res, next) => {
+app.get('/sign-out', (req, res, next) => {
     req.logout(function(err) {
         if (err) {
             return next(err);
@@ -194,7 +194,7 @@ app.get('https://aianswerserver-monetize.onrender.com/sign-out', (req, res, next
 });
 
 // Обработка успешной оплаты
-app.get('https://aianswerserver-monetize.onrender.com/payment-success', async (req, res) => {
+app.get('/payment-success', async (req, res) => {
     const { tokens } = req.query;
     const userId = req.session.passport.user; // Получаем ID пользователя из сессии
 
@@ -213,11 +213,11 @@ app.get('https://aianswerserver-monetize.onrender.com/payment-success', async (r
 });
 
 // Обработка отмены оплаты
-app.get('https://aianswerserver-monetize.onrender.com/payment-cancelled', (req, res) => {
+app.get('/payment-cancelled', (req, res) => {
     res.sendFile(path.resolve('./public/payment-cancelled/payment-cancelled.html'));
 });
 
-app.get('https://aianswerserver-monetize.onrender.com/api/user-info', async (req, res) => {
+app.get('/api/user-info', async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ error: "Unauthorized" });
     }
@@ -235,7 +235,7 @@ app.get('https://aianswerserver-monetize.onrender.com/api/user-info', async (req
     }
 });
 
-app.post('https://aianswerserver-monetize.onrender.com/api/update-tokens', async (req, res) => {
+app.post('/api/update-tokens', async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ error: "Unauthorized" });
     }
@@ -256,7 +256,7 @@ app.post('https://aianswerserver-monetize.onrender.com/api/update-tokens', async
 });
 
 // Пример запроса к OpenAI
-app.post('https://aianswerserver-monetize.onrender.com/api', async (req, res) => {
+app.post('/api', async (req, res) => {
     // if (!req.isAuthenticated()) {
     //     return res.status(401).json({ error: "Unauthorized" });
     // }
