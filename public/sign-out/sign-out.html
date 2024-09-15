@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>google auth</title>
+    <link rel="stylesheet" href="sign-out.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <header class="header">
+            <span class="header_logo">AI Question Answerer</span>
+        </header>
+        <main class="main">
+            <button class="main__button" data-element="paywall__button">Continue with Google</button>
+        </main>
+    </div>
+</div>
+<script>
+    const paywallButtons = document.querySelectorAll('[data-element="paywall__button"]')
+    paywallButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            window.open('http://localhost:4000/auth/google', '_blank');
+        })
+    })
+</script>
+</body>
+</html>

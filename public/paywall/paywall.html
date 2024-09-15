@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paywall</title>
+    <link rel="stylesheet" href="paywall.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <header class="header">
+            <span class="header_logo">AI Question Answerer</span>
+        </header>
+        <main class="main">
+            <h1 class="caption">
+                <span>Top up the</span>
+                <span class="caption__text">queries</span>
+            </h1>
+            <div class="paywall">
+                <div class="paywall__item">
+                    <form class="paywall__form" id="checkout-form-299" data-price="299" data-tokens="3000">
+                        <div class="paywall__header">
+                            <span class="paywall__tokens">300</span>
+                            <span class="paywall__tokens-text">queries</span>
+                        </div>
+                        <div class="paywall__body">
+                            <h2 class="paywall__price">$2.99</h2>
+                            <span class="paywall__info">/one-time</span>
+                        </div>
+                        <div class="paywall__footer">
+                            <button class="paywall__submit" type="button" onclick="redirectToCheckout('checkout-form-299')">Get Standard Amount</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="paywall__item">
+                    <form class="paywall__form" id="checkout-form-499" data-price="499" data-tokens="6000">
+                        <div class="paywall__header">
+                            <span class="paywall__tokens">600</span>
+                            <span class="paywall__tokens-text">queries</span>
+                        </div>
+                        <div class="paywall__body">
+                            <span class="paywall__discount">$3.90</span>
+                            <h2 class="paywall__price">$4.99</h2>
+                            <span class="paywall__info">/one-time</span>
+                        </div>
+                        <div class="paywall__footer">
+                            <button class="paywall__submit" type="button" onclick="redirectToCheckout('checkout-form-499')">Get Plus Amount</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <span class="footer__user" id="userName">solocomrade@gmail.com</span>
+            <button id="signOutButton" class="footer__out">Sign out</button>
+        </footer>
+    </div>
+</div>
+<!--<ul class="paywall__list">-->
+<!--    <li class="paywall__item">-->
+<!--        <form id="checkout-form-1000" data-price="1000" data-tokens="10">-->
+<!--            <button type="button" onclick="redirectToCheckout('checkout-form-1000')">1000</button>-->
+<!--        </form>-->
+<!--    </li>-->
+<!--    <li class="paywall__item">-->
+<!--        <form id="checkout-form-100" data-price="100" data-tokens="3">-->
+<!--            <button type="button" onclick   ="redirectToCheckout('checkout-form-100')">100</button>-->
+<!--        </form>-->
+<!--    </li>-->
+<!--</ul>-->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('pk_test_51PfQVHBnWD4SD0NmIdlbxKiZmtfj94QaVhpSGhWUPstIZBgk0f8tOBIGQPL81XMC5bNO2FaBaTHFJbxJGk5ggVmO00UKSHQNpc'); // Укажите ваш публичный ключ Stripe
+
+    window.onload = async function() {
+        try {
+            // Запрос для получения имени пользователя
+            const response = await fetch('/api/user');
+            const data = await response.json();
+            document.getElementById('userName').textContent = data.email; // Устанавливаем имя пользователя на страницу
+        } catch (error) {
+            console.error('Error fetching user name:', error);
+        }
+    };
+
+    document.getElementById('signOutButton').addEventListener('click', async () => {
+        console.log('Signing out...');
+        try {
+            const response = await fetch('/sign-out', {
+                method: 'GET',
+                credentials: 'include' // Важно для передачи куки
+            });
+
+            if (response.ok) {
+                console.log('Sign out successful');
+                // Перенаправляем пользователя на страницу выхода
+                window.location.href = '/sign-out';
+            } else {
+                console.error('Sign out failed');
+            }
+        } catch (error) {
+            console.error('Error during sign out:', error);
+        }
+    });
+
+
+
+    async function redirectToCheckout(formId) {
+        const form = document.getElementById(formId);
+        const price = form.getAttribute('data-price');
+        const tokens = form.getAttribute('data-tokens');
+
+        const response = await fetch('/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ price, tokens }),
+        });
+
+        const sessionId = (await response.json()).id;
+
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        if (error) {
+            console.error('Error redirecting to checkout:', error);
+            alert('Error redirecting to checkout.');
+        }
+    }
+</script>
+</body>
+</html>

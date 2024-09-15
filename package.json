@@ -10,10 +10,17 @@
   "author": "solocomrade@mail.ru",
   "license": "ISC",
   "dependencies": {
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-session": "^1.18.0",
+    "mongoose": "^8.5.4",
     "node-fetch": "^2.6.1",
-    "openai": "^4.52.4"
+    "openai": "^4.52.4",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "path": "^0.12.7",
+    "stripe": "^16.8.0"
   }
 }
