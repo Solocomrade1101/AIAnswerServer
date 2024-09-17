@@ -12,7 +12,7 @@ import MongoStore from 'connect-mongo'
 
 dotenv.config();
 
-const baseURL = process.env.BASE_URL || 'http://localhost:4000';
+const baseURL = process.env.BASE_URL;
 
 
 const app = express();
@@ -44,7 +44,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
-        secure: true, // true, если используете HTTPS
+        secure: false, // true, если используете HTTPS
         httpOnly: true, // Защита от XSS атак
         sameSite: 'lax', // Настройка для предотвращения проблем с кросс-доменными куками
     },
@@ -289,5 +289,5 @@ app.post('/api', async (req, res) => {
 
 // Запуск сервера
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running`);
 });
