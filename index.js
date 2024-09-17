@@ -44,9 +44,16 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
-        secure: true, // Сделай true, если используешь HTTPS
-    }
+        secure: true, // true, если используете HTTPS
+        httpOnly: true, // Защита от XSS атак
+        sameSite: 'lax', // Настройка для предотвращения проблем с кросс-доменными куками
+    },
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: 'sessions',
+    }),
 }));
+
 
 
 // Инициализация Passport
@@ -107,15 +114,15 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function(origin, callback){
-        // Проверка, разрешён ли этот origin
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true)
+            callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'))
+            callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true // Важно: для поддержки передачи куков и других учетных данных
+    credentials: true // Для передачи куков
 }));
+
 app.use(express.json());
 
 // Маршруты для авторизации
