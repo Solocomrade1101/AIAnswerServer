@@ -43,10 +43,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
-        secure: false, // true, если используете HTTPS
-        httpOnly: true, // Защита от XSS атак
-        sameSite: 'lax', // Настройка для предотвращения проблем с кросс-доменными куками
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure: true, // should be true for HTTPS
+        httpOnly: true,
+        sameSite: 'none'
     },
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URI,
